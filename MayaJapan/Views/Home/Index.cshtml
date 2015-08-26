@@ -1,0 +1,119 @@
+﻿@model IEnumerable<MayaJapan.Models.ImageGroup>
+@{
+    ViewBag.Title = "Home";
+}
+
+
+@{
+
+}
+<div class="image-container" id="main-image">
+    @{
+        if (Model.Count() > 0)
+        {
+            Random random = new Random();
+
+            var encodedImageGroup = Model.ElementAt(random.Next(Model.Count()));
+            var encodedImage = encodedImageGroup.ImageValue.ElementAt(random.Next(encodedImageGroup.ImageValue.Count()));
+            var base64 = Convert.ToBase64String(encodedImage.ImageValue);
+            var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+            <img src="@imgSrc" class="jumbo-image" />
+        }
+    }
+</div>
+<button id="imgur-test">Hello</button>
+
+<div class="row" id="content">
+    <div class="col-md-6">
+        <h2>What photos have I taken today?</h2>
+        <div class="image-form">
+            <button class="btn btn-default" id="add-photos">Add some photos</button>
+        </div>
+
+
+    </div>
+    <div class="col-md-6 image-preview">
+        <div class="row">
+            <div class="col-md-6 preview-textbox">
+                <span class="image-preview-text image-preview-name" id="preview-name">
+                </span>
+                <span class="image-preview-text image-preview-description" id="preview-description">
+                </span>
+            </div>
+            <label id="img-grid-label" for="img-grid">Photos</label>
+            <div class="col-md-6 image-grid" id="img-grid">
+            </div>
+        </div>
+        <button class="btn btn-default" id="save-images" type="submit">Save</button>
+    </div>
+    <div id="temp"></div>
+</div>
+<img id="img" src="" />
+<div id="base"></div>
+@Scripts.Render("~/Scripts/Index.js")
+<script type="text/javascript">
+    $(function () {
+        $("#add-photos").click(function (e) {
+            $("#main-image").slideUp();
+            $("#temp").load("@Url.Action("Form")", function () {
+                loadForm();
+            });
+        });
+
+    });
+
+    function el(id) { return document.getElementById(id); } // Get elem by ID
+
+    function readImage(input) {
+        if (input.files && input.files[0]) {
+            var FR = new FileReader();
+            FR.onload = function (e) {
+                el("img").src = e.target.result;
+                el("base").innerHTML = e.target.result;
+                sendToImgur(e.target.result);
+            };
+            FR.readAsDataURL(input.files[0]);
+        }
+    }
+
+    
+
+    function imgurTest(input) {
+        var base64 = convertImgToBase64URL(input.files[0], sendToImgur);
+
+    }
+
+    function sendToImgur(img) {
+        $.ajax({
+            url: "https://api.imgur.com/3/image",
+            type: "POST",
+            headers: {
+                Authorization: "Client-ID 0aa4f7a77734f59",
+                Accept: "application/json"
+            },
+            data: {
+                image: img.split("base64,")[1],
+                type: "base64"
+            },
+            success: function (result) {
+            }
+
+        });
+    }
+
+    function convertImgToBase64URL(url, callback, outputFormat) {
+        var img = new Image();
+        img.crossOrigin = 'Anonymous';
+        img.onload = function () {
+            var canvas = document.createElement('CANVAS'),
+            ctx = canvas.getContext('2d'), dataURL;
+            canvas.height = this.height;
+            canvas.width = this.width;
+            ctx.drawImage(this, 0, 0);
+            dataURL = canvas.toDataURL(outputFormat);
+            callback(dataURL);
+            canvas = null;
+        };
+        img.src = url;
+    }
+</script>

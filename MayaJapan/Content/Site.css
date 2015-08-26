@@ -1,0 +1,136 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.navbar {
+    background-color: #99CCCC;
+}
+
+.jumbo-image {
+    width: 300px;
+    height: auto;
+}
+
+#image-grid {
+    /* Prevent vertical gaps 
+  line-height: 0;
+   
+  -webkit-column-count: 5;
+  -webkit-column-gap:   0px;
+  -moz-column-count:    5;
+  -moz-column-gap:      0px;
+  column-count:         5;
+  column-gap:           0px;  
+      */
+}
+
+.image-container {
+    display: block;
+}
+
+    .image-container img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        border: 5px solid #4099A1;
+        -webkit-transition: all 2s;
+        transition: all 2s;
+        z-index: 1;
+        box-shadow: 5px 5px 5px #888888;
+    }
+
+        .image-container img:hover {
+            border-color: #FFAD64;
+            width: 400px;
+            height: auto;
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+        }
+
+body {
+    padding-top: 60px;
+}
+
+#temp {
+    display: none;
+}
+
+.preview-textbox {
+    padding: 20px;
+}
+
+.image-preview {
+    margin-top: 20px;
+    background-color: #9DD9DF;
+    padding: 10px;
+    display: none;
+    box-shadow: 2px 2px 2px #888888;
+}
+
+.image-preview-text {
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.1;
+    display: block;
+}
+
+.image-preview-name {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.image-preview-description {
+    font-style: italic;
+}
+
+.preview-image {
+    width: 125px;
+    height: 125px;
+}
+
+.image-grid {
+    padding: 10px;
+    background-color: #EEE;
+    box-shadow: 2px 2px 2px #888888;
+    display: none;
+}
+
+    .image-grid img {
+        padding: 5px;
+    }
+
+#img-grid-label {
+    display: none;
+}
+
+.row {
+    margin-right: unset;
+    margin-left: unset;
+}
+
+#save-images {
+    background-color: #FFD7B3;
+    display: none;
+}

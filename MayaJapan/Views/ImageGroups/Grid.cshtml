@@ -1,0 +1,20 @@
+﻿@model IEnumerable<MayaJapan.Models.ImageGroup>
+
+@{
+    ViewBag.Title = "Grid";
+    @Styles.Render("~/Content/Grid.css");
+}
+<h1>My Year in Japan so far...</h1>
+<div id="photos">
+
+    @foreach(var item in Model)
+    {
+        foreach(var image in item.ImageValue)
+        {
+            var base64 = Convert.ToBase64String(image.ImageValue);
+            var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                <img src="@imgSrc" />
+        }
+    }
+</div>
+

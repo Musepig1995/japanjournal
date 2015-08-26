@@ -1,0 +1,18 @@
+﻿@using (Html.BeginForm("Create", "ImageGroups", null, FormMethod.Post, new { enctype = "multipart/form-data", id = "picture-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div>
+        <label for="Name">Name:</label>
+        <input class="form-control" type="text" name="Name" id="Name" />
+    </div>
+    <div class="">
+        <label for="Description">Description:</label>
+        <input class="form-control" type="text" name="Description" id="Description" />
+    </div>
+    <div>
+        <label for="file">Upload File:</label>
+        <input style="display:none;" type="file" onchange="readImage(this)" name="imageValue" id="file" multiple />
+        <button class="btn btn-default" id="upload-file">Add Photos</button>
+    </div>
+    <input id="enter-button" class="form-control" type="submit" value="Upload" />
+}
