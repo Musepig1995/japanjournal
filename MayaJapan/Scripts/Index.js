@@ -1,4 +1,6 @@
-﻿function setupHandlers() {
+﻿var imagesLoaded = false,
+    fakeImages = ["http://i.imgur.com/doIG5D2.jpg", "http://i.imgur.com/doIG5D2.jpg"];
+function setupHandlers() {
     $("#Name").on("input", function(e) {
         var name = $(this).val();
         $("#preview-name").text(name);
@@ -22,11 +24,18 @@
 }
 function checkAddButton() {
     var name = $("#Name").val(),
-        desc = $("#Description").val(),
-        images = $("#img-grid").children();
+        desc = $("#Description").val();
 
-    if (name && desc && images.length > 0) {
-        $("#save-images").show();
+    if (name && desc) {
+        if (!imagesLoaded) {
+            $("#save-images").html("Loading...");
+            $("#save-images").prop("disabled", true);
+            $("#save-images").show();
+        } else {
+            $("#save-images").html("Save");
+            $("#save-images").prop("disabled", false);
+            $("#save-images").show();
+        }
     } else {
         $("#save-images").hide();
     }

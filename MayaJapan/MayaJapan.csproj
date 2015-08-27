@@ -156,6 +156,14 @@
     <Compile Include="Migrations\201508221941515_UpdatedImageGroup2.Designer.cs">
       <DependentUpon>201508221941515_UpdatedImageGroup2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201508271925183_ImageUrl.cs" />
+    <Compile Include="Migrations\201508271925183_ImageUrl.Designer.cs">
+      <DependentUpon>201508271925183_ImageUrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201508271929309_UpdatedToString.cs" />
+    <Compile Include="Migrations\201508271929309_UpdatedToString.Designer.cs">
+      <DependentUpon>201508271929309_UpdatedToString.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\Image.cs" />
@@ -243,10 +251,19 @@
     <EmbeddedResource Include="Migrations\201508221941515_UpdatedImageGroup2.resx">
       <DependentUpon>201508221941515_UpdatedImageGroup2.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508271925183_ImageUrl.resx">
+      <DependentUpon>201508271925183_ImageUrl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508271929309_UpdatedToString.resx">
+      <DependentUpon>201508271929309_UpdatedToString.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

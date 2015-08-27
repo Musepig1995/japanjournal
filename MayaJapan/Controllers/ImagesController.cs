@@ -20,7 +20,7 @@ namespace MayaJapan.Controllers
 
         public static void Create(Image image)
         {
-            if (image.ImageValue != null && image.ImageValue.Count() > 0)
+            if (image.ImageUrl != null)
             {
                 db.Images.Add(image);
                 db.SaveChanges();

@@ -28,13 +28,7 @@
         <td>
             @if (item.ImageValue != null)
             {
-                foreach (var image in item.ImageValue)
-                {
-                    var base64 = Convert.ToBase64String(image.ImageValue);
-                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
-
-                <img src="@imgSrc" class="jumbo-image" />
-                }
+                
             }
         </td>
         <td>

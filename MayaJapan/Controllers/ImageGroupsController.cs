@@ -54,25 +54,22 @@ namespace MayaJapan.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Name,Description,Date")] ImageGroup imageGroup, HttpPostedFileBase[] imageValue)
+        public ActionResult Create([Bind(Include = "ID,Name,Description,Date")] ImageGroup imageGroup, [Bind(Include = "ImageValue")] string values)
         {
             if (ModelState.IsValid)
             {
                 imageGroup.ImageValue = new List<Image>();
-                foreach(HttpPostedFileBase image in imageValue)
+                foreach (var image in imageGroup.ImageValue)
                 {
-                    using(MemoryStream stream = new MemoryStream())
-                    {
-                        image.InputStream.CopyTo(stream);
-                        byte[] encodedImage = stream.ToArray();
 
-                        Image imageEntity = new Image();
-                        imageEntity.ImageValue = encodedImage;
+                    string imageUrl = image.ImageUrl;
+                    Image imageEntity = new Image();
+                    imageEntity.ImageUrl = imageUrl;
 
-                        ImagesController.Create(imageEntity);
+                    ImagesController.Create(imageEntity);
 
-                        imageGroup.ImageValue.Add(imageEntity);
-                    }
+                    imageGroup.ImageValue.Add(imageEntity);
+
                 }
 
                 imageGroup.Date = DateTime.Now;
@@ -105,7 +102,7 @@ namespace MayaJapan.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name,Description,Date")] ImageGroup imageGroup)
+        public ActionResult Edit([Bind(Include = "ID,Name,Description,Date,Url")] ImageGroup imageGroup)
         {
             if (ModelState.IsValid)
             {
