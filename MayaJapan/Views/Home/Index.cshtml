@@ -5,7 +5,7 @@
 
 
 @{
-
+  
 }
 <div class="image-container" id="main-image">
 
@@ -49,65 +49,4 @@
         });
 
     });
-
-    function readImage(input) {
-        if (input.files) {
-            var images = [];
-            $.each(input.files, function (index, object) {
-                var FR = new FileReader();
-                FR.onload = function (e) {
-                    images.push(fakeImages[index]);
-                    if (images.length === input.files.length) {
-                        // All images have been parsed 
-                        buildImagesIntoForm(images);
-                    }
-                };
-                FR.readAsDataURL(object);
-            });
-        }
-    }
-
-    function buildImagesIntoForm(images) {
-        $("#img-grid-label").show();
-        $("#img-grid").show();
-        $.each(images, function (i, element) {
-            $("#hidden-pictures").val(function (i, val) {
-                return val + (!val ? "" : ", ") + element;
-            });
-            $('#img-grid').prepend("<img src='" + element + "' class='preview-image' />");
-        });
-        // Tell the user that images can now be saved.
-        imagesLoaded = true;
-        checkAddButton();
-    }
-
-
-
-    function imgurTest(input) {
-        var base64 = convertImgToBase64URL(input.files[0], sendToImgur);
-
-    }
-
-    function sendToImgur(img) {
-        var imageUrl;
-        $.ajax({
-            url: "https://api.imgur.com/3/image",
-            type: "POST",
-            headers: {
-                Authorization: "Client-ID 0aa4f7a77734f59",
-                Accept: "application/json"
-            },
-            async: false,
-            data: {
-                image: img.split("base64,")[1],
-                type: "base64"
-            },
-            success: function (result) {
-                imageUrl = result.data.link;
-            }
-
-        });
-        return imageUrl;
-    }
-
 </script>

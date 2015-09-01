@@ -54,17 +54,26 @@ namespace MayaJapan.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Name,Description,Date")] ImageGroup imageGroup, [Bind(Include = "ImageValue")] string values)
+        public ActionResult Create([Bind(Include = "ID,Name,Description,Date")] ImageGroup imageGroup)
         {
             if (ModelState.IsValid)
             {
+                var unformattedUrlSet = Request["images"] != null ? Request["images"] : null;
+                string[] imageUrlSet = null;
+
+                if (!string.IsNullOrEmpty(unformattedUrlSet))
+                {
+                    imageUrlSet = this.stripImageUrl(unformattedUrlSet);
+
+                }
+
                 imageGroup.ImageValue = new List<Image>();
-                foreach (var image in imageGroup.ImageValue)
+                
+                foreach (var image in imageUrlSet)
                 {
 
-                    string imageUrl = image.ImageUrl;
                     Image imageEntity = new Image();
-                    imageEntity.ImageUrl = imageUrl;
+                    imageEntity.ImageUrl = image.Trim();
 
                     ImagesController.Create(imageEntity);
 
@@ -146,6 +155,12 @@ namespace MayaJapan.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private string[] stripImageUrl(string urlSet)
+        {
+            var imageArray = urlSet.Split(',');
+            return imageArray;
         }
     }
 }

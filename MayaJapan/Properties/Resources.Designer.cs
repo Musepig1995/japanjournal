@@ -59,5 +59,14 @@ namespace MayaJapan.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 0aa4f7a77734f59.
+        /// </summary>
+        internal static string ImgurClientId {
+            get {
+                return ResourceManager.GetString("ImgurClientId", resourceCulture);
+            }
+        }
     }
 }
