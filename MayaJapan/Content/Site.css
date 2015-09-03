@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    font-family: "Sans-Serif";
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -133,4 +134,22 @@ body {
 #save-images {
     background-color: #FFD7B3;
     display: none;
+}
+#enter-button {
+    display: none;
+}
+.custom-button {
+    margin-top: 25px;
+    background-color: #68B9C1;
+    color: #FFF;
+    font-size: 15px;
+    height: 40px;
+    width: 125px;
+    line-height: 40px;
+    text-align: center;
+    border: 0;
+    transition: all 0.3s ease 0s;
+}
+.custom-button:hover {
+    box-shadow: inset 0 0 0 3px #27858E;
 }

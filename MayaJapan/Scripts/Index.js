@@ -73,7 +73,7 @@ function readImage(input) {
         $.each(input.files, function (index, object) {
             var FR = new FileReader();
             FR.onload = function (e) {
-                images.push(fakeImages[index]);
+                images.push(sendToImgur(e.target.result));
                 if (images.length === input.files.length) {
                     // All images have been parsed 
                     buildImagesIntoForm(images);

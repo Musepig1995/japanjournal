@@ -2,50 +2,32 @@
 
 @{
     ViewBag.Title = "Index";
+    @Styles.Render("~/Content/imagegroup.css");
+    @Scripts.Render("~/Scripts/imageGroupImages.js");
 }
 
-<h2>Index</h2>
+<h2>That time when I...</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Date)
-        </th>
-        <th></th>
-    </tr>
+<div class="wrapper">
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @if (item.ImageValue != null)
-            {
-                
-            }
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Date)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
 
-</table>
+        <div class="image-group-container row">
+            <div class="col-md-6 image-group-preview">
+                <span class="image-group-title">@item.Name</span>
+                <span class="image-group-description">@item.Description</span>
+                @foreach(var image in item.ImageValue)
+                {
+                    <img src="@image.ImageUrl" onclick="clickThumbnail(this)" />
+                }
+            </div>
+            <div class="col-md-6 image-group-highlight-image">
+                <img class="image-group-highlight" src="@item.ImageValue.FirstOrDefault().ImageUrl" />
+            </div>
+        </div>
+        <hr />
+    }
+    </div>
+
+
