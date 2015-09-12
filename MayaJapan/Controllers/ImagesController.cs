@@ -22,7 +22,9 @@ namespace MayaJapan.Controllers
         {
             if (image.ImageUrl != null)
             {
-                db.Images.Add(image);
+                // To prevent EF from preventing creation we have to create a new object
+                Image tempImage = image;
+                db.Images.Add(tempImage);
                 db.SaveChanges();
                 return;
             }
