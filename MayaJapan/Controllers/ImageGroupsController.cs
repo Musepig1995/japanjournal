@@ -122,6 +122,23 @@ namespace MayaJapan.Controllers
             return View(imageGroup);
         }
 
+        public void Clear()
+        {
+            var imageGroups = db.ImageGroups.ToArray();
+            foreach(var imageGroup in imageGroups)
+            {
+                var images = imageGroup.ImageValue.ToArray();
+
+                foreach(var image in images)
+                {
+                    db.Images.Remove(image);
+                }
+                db.ImageGroups.Remove(imageGroup);
+            }
+
+            db.SaveChanges();
+        }
+
         // GET: ImageGroups/Delete/5
         public ActionResult Delete(int? id)
         {

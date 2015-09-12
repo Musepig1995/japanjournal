@@ -1,5 +1,6 @@
 ﻿var imagesLoaded = false,
-    fakeImages = ["http://i.imgur.com/doIG5D2.jpg", "http://i.imgur.com/doIG5D2.jpg"];
+    fakeImages = ["http://i.imgur.com/doIG5D2.jpg", "http://i.imgur.com/doIG5D2.jpg"],
+    formLoaded = false;
 function setupHandlers() {
     $("#Name").on("input", function(e) {
         var name = $(this).val();
@@ -20,6 +21,15 @@ function setupHandlers() {
         form[0].submit();
     });
     $("#picture-form").submit(function (e) {
+    });
+    $("#back").click(function (e) {
+        $("#main-image").slideDown();
+        $("#header-content").slideDown();
+        $("#add-photos").show();
+        if (formLoaded) {
+            $("#picture-form").slideUp();
+            $("#image-preview").slideUp();
+        }
     });
 }
 function checkAddButton() {
@@ -66,6 +76,7 @@ function loadForm() {
     $("#add-photos").hide();
     createPreview();
     setupHandlers();
+    formLoaded = true;
 }
 function readImage(input) {
     if (input.files) {

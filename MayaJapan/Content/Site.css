@@ -153,3 +153,31 @@ body {
 .custom-button:hover {
     box-shadow: inset 0 0 0 3px #27858E;
 }
+
+#header-content img {
+    height: 300px;
+    max-width: 600px;
+    margin: 20px;
+    margin-left: 0px;
+    box-shadow: 3px 3px 1px #ccc;
+  -webkit-box-shadow: 3px 3px 1px #ccc;
+  -moz-box-shadow: 3px 3px 1px #ccc;
+}
+#header-content:first-child {
+    border-right: thin #ccc;
+}
+.icon-header {
+    font-size: 3em;
+    line-height: 3em;
+}
+.japan-header .glyphicon {
+    font-size: 10em;
+    margin-left: 25%;
+    color: #68B9C1;
+    transition: all 0.3s ease 0s;
+    align-content:center;
+}
+.japan-header .glyphicon:hover {
+    color: #117079;
+    cursor: pointer;
+}

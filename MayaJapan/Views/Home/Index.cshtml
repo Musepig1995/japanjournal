@@ -3,24 +3,56 @@
     ViewBag.Title = "Home";
 }
 
+<div class="row" id="header-content">
+    <div class="col-md-6">
+        @{
+            if (Model.Count() > 0)
+            {
+                Random random = new Random();
 
-@{
-  
-}
-<div class="image-container" id="main-image">
+                var imageGroup = Model.ElementAt(random.Next(Model.Count()));
+                var image = imageGroup.ImageValue.ElementAt(random.Next(imageGroup.ImageValue.Count()));
 
+                if (!string.IsNullOrEmpty(image.ImageUrl))
+                {
+                    <img src="@image.ImageUrl" />
+                }
+                else
+                {
+                    // A funny image of Japan's Flag
+                    <img src="http://i.imgur.com/QgI2kpf.jpg" />
+                }
+            }
+            else
+            {
+                <img src="http://i.imgur.com/QgI2kpf.jpg" />
+            }
+        }
+    </div>
+    <div class="col-md-6 japan-header">
+        <div class="header-grid">
+            <a href='@Url.Action("Grid", "ImageGroups")'>
+                <span class="glyphicon glyphicon-th"></span>
+            </a>
+        </div>
+        <div class="header-overview">
+            <a href="@Url.Action("Index", "ImageGroups")">
+                <span class="glyphicon glyphicon-picture"></span>
+            </a>
+            
+        </div>
+    </div>
 </div>
-
 <div class="row" id="content">
     <div class="col-md-6">
         <h2>What photos have I taken today?</h2>
         <div class="image-form">
-            <button class="btn btn-default" id="add-photos">Add some photos</button>
+            <button class="custom-button" id="add-photos">Add some photos</button>
         </div>
 
 
     </div>
-    <div class="col-md-6 image-preview">
+    <div class="col-md-6 image-preview" id="image-preview">
         <div class="row">
             <div class="col-md-6 preview-textbox">
                 <span class="image-preview-text image-preview-name" id="preview-name">
@@ -43,10 +75,18 @@
     $(function () {
         $("#add-photos").click(function (e) {
             $("#main-image").slideUp();
-            $("#temp").load("@Url.Action("Form")", function () {
-                loadForm();
-            });
+            $("#header-content").slideUp();
+            if (!formLoaded) {
+                $("#temp").load("@Url.Action("Form")", function () {
+                    loadForm();
+                });
+            } else {
+                $("#main-image").slideUp();
+                $("#header-content").slideUp();
+                $("#picture-form").slideDown();
+                $("#image-preview").slideDown();
+                $("#add-photos").hide();
+            }
         });
-
     });
 </script>
