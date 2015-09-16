@@ -9,10 +9,10 @@
 <h2>That time when I...</h2>
 
 <div class="wrapper">
-
-    @foreach (var item in Model)
+    
+    @foreach (var item in Model.Reverse())
     {
-
+        // Show the most recent items first!    
         <div class="image-group-container row">
             <div class="col-md-6 image-group-preview">
                 <span class="image-group-title">@item.Name</span>

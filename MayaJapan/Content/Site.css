@@ -181,3 +181,11 @@ body {
     color: #117079;
     cursor: pointer;
 }
+#back {
+    margin-left: 10px;
+    font-size: 1.5em;
+    color: #117079;
+}
+#back:hover {
+    cursor:pointer;
+}

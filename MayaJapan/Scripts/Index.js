@@ -2,23 +2,26 @@
     fakeImages = ["http://i.imgur.com/doIG5D2.jpg", "http://i.imgur.com/doIG5D2.jpg"],
     formLoaded = false;
 function setupHandlers() {
-    $("#Name").on("input", function(e) {
+    $("#Name").on("input", function (e) {
         var name = $(this).val();
         $("#preview-name").text(name);
         checkAddButton();
     });
-    $("#Description").on("input", function(e) {
+    $("#Description").on("input", function (e) {
         var desc = $(this).val();
         $("#preview-description").text(desc);
         checkAddButton();
     });
-    $("#upload-file").on("click", function(e) {
+    $("#upload-file").on("click", function (e) {
         e.preventDefault();
         $("#file").trigger("click");
     });
     $("#save-images").on("click", function (e) {
-        var form = $("#picture-form");
-        form[0].submit();
+        var form = $("#picture-form"),
+            imageInput = document.getElementById("file");
+
+        $("#save-images").html("Uploading...");
+        readImages(imageInput, form);
     });
     $("#picture-form").submit(function (e) {
     });
@@ -38,7 +41,7 @@ function checkAddButton() {
 
     if (name && desc) {
         if (!imagesLoaded) {
-            $("#save-images").html("Loading...");
+            $("#save-images").html("Save");
             $("#save-images").prop("disabled", true);
             $("#save-images").show();
         } else {
@@ -57,11 +60,16 @@ function readURL(input) {
     if (input.files && input.files[0]) {
         $("#img-grid-label").show();
         $("#img-grid").show();
-        $.each(input.files, function() {
+        $.each(input.files, function (index, element) {
             var reader = new FileReader();
 
             reader.onload = function (e) {
                 $('#img-grid').prepend("<img src='" + e.target.result + "' class='preview-image' />");
+
+                if (index === input.files.length - 1) {
+                    // Tell the user that the images can now be saved.
+                    imagesLoaded = true;
+                }
                 checkAddButton();
             };
 
@@ -78,7 +86,7 @@ function loadForm() {
     setupHandlers();
     formLoaded = true;
 }
-function readImage(input) {
+function readImages(input, form) {
     if (input.files) {
         var images = [];
         $.each(input.files, function (index, object) {
@@ -87,7 +95,7 @@ function readImage(input) {
                 images.push(sendToImgur(e.target.result));
                 if (images.length === input.files.length) {
                     // All images have been parsed 
-                    buildImagesIntoForm(images);
+                    buildImagesIntoForm(images, form);
                 }
             };
             FR.readAsDataURL(object);
@@ -95,18 +103,13 @@ function readImage(input) {
     }
 }
 
-function buildImagesIntoForm(images) {
-    $("#img-grid-label").show();
-    $("#img-grid").show();
+function buildImagesIntoForm(images, form) {
     $.each(images, function (i, element) {
         $("#hidden-pictures").val(function (i, val) {
             return val + (!val ? "" : ", ") + element;
         });
-        $('#img-grid').prepend("<img src='" + element + "' class='preview-image' />");
     });
-    // Tell the user that images can now be saved.
-    imagesLoaded = true;
-    checkAddButton();
+    form[0].submit();
 }
 
 
@@ -125,11 +128,11 @@ function sendToImgur(img) {
             Authorization: "Client-ID 0aa4f7a77734f59",
             Accept: "application/json"
         },
-        async: false,
         data: {
             image: img.split("base64,")[1],
             type: "base64"
         },
+        async: false,
         success: function (result) {
             imageUrl = result.data.link;
         }

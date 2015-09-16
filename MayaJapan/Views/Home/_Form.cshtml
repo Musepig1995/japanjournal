@@ -2,7 +2,7 @@
 {
     @Html.AntiForgeryToken()
     <div>
-        <label for="Name">Name:</label>
+        <label for="Name">Title:</label>
         <input class="form-control" type="text" name="Name" id="Name" />
     </div>
     <div class="">
@@ -10,7 +10,7 @@
         <input class="form-control" type="text" name="Description" id="Description" />
     </div>
     <div>
-        <input style="display:none;" type="file" onchange="readImage(this)" name="imageValue" id="file" multiple />
+        <input style="display:none;" type="file" onchange="readURL(this)" name="imageValue" id="file" multiple />
         <button class="custom-button" id="upload-file">Choose Photos</button>
         <span id="back">Back</span>
         <input name="images" type="hidden" id="hidden-pictures" />
