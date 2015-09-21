@@ -15,7 +15,7 @@
         // Show the most recent items first!    
         <div class="image-group-container row">
             <div class="col-md-6 image-group-preview">
-                <span class="image-group-title">@item.Name</span>
+                <span class="image-group-title" id="@item.ID">@item.Name</span>
                 <span class="image-group-description">@item.Description</span>
                 @foreach(var image in item.ImageValue)
                 {

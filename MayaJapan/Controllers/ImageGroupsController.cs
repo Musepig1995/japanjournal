@@ -82,9 +82,13 @@ namespace MayaJapan.Controllers
                 }
 
                 imageGroup.Date = DateTime.Now;
-
-                db.ImageGroups.Add(imageGroup);
-                db.SaveChanges();
+                try {
+                    db.ImageGroups.Add(imageGroup);
+                    db.SaveChanges();
+                } catch(Exception e)
+                {
+                    var apple = e;
+                }
                 return RedirectToAction("Index");
             }
 
@@ -139,27 +143,18 @@ namespace MayaJapan.Controllers
             db.SaveChanges();
         }
 
-        // GET: ImageGroups/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            ImageGroup imageGroup = db.ImageGroups.Find(id);
-            if (imageGroup == null)
-            {
-                return HttpNotFound();
-            }
-            return View(imageGroup);
-        }
-
         // POST: ImageGroups/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult Delete(int id)
         {
             ImageGroup imageGroup = db.ImageGroups.Find(id);
+
+            var images = imageGroup.ImageValue.ToArray();
+
+            foreach(var image in images)
+            {
+                db.Images.Remove(image);
+            }
+
             db.ImageGroups.Remove(imageGroup);
             db.SaveChanges();
             return RedirectToAction("Index");

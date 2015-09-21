@@ -25,7 +25,6 @@ namespace MayaJapan.Controllers
                 // To prevent EF from preventing creation we have to create a new object
                 Image tempImage = image;
                 db.Images.Add(tempImage);
-                db.SaveChanges();
                 return;
             }
 
