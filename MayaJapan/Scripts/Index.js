@@ -1,5 +1,4 @@
 ﻿var imagesLoaded = false,
-    fakeImages = ["http://i.imgur.com/doIG5D2.jpg", "http://i.imgur.com/doIG5D2.jpg"],
     formLoaded = false;
 function setupHandlers() {
     $("#Name").on("input", function (e) {
@@ -21,6 +20,7 @@ function setupHandlers() {
             imageInput = document.getElementById("file");
 
         $("#save-images").html("Uploading...");
+        $("#save-images").prop("disabled", true);
         readImages(imageInput, form);
     });
     $("#picture-form").submit(function (e) {
