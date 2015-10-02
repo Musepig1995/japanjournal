@@ -4,6 +4,7 @@
     ViewBag.Title = "Index";
     @Styles.Render("~/Content/imagegroup.css");
     @Scripts.Render("~/Scripts/imageGroupImages.js");
+    @Scripts.Render("https://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js")
 }
 
 <h2>That time when I...</h2>
@@ -19,15 +20,20 @@
                 <span class="image-group-description">@item.Description</span>
                 @foreach(var image in item.ImageValue)
                 {
-                    <img src="@image.ImageUrl" onclick="clickThumbnail(this)" />
+                    <img class="lazy" data-original="@image.ImageUrl" onclick="clickThumbnail(this)" />
                 }
             </div>
             <div class="col-md-6 image-group-highlight-image">
-                <img class="image-group-highlight" src="@item.ImageValue.FirstOrDefault().ImageUrl" />
+                <img class="image-group-highlight lazy" data-original="@item.ImageValue.FirstOrDefault().ImageUrl" />
             </div>
         </div>
         <hr />
     }
     </div>
+<script>
+    $(function () {
+        $("img.lazy").lazyload();
+    });
+</script>
 
 

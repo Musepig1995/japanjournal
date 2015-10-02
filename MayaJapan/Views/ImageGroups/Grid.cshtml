@@ -7,8 +7,10 @@
 <h1>My Year in Japan so far...</h1>
 <div id="photos">
 
+    
     @foreach(var item in Model.OrderBy(a => Guid.NewGuid()))
     {
+        // Random ordering
         foreach(var image in item.ImageValue)
         {
 
@@ -17,4 +19,3 @@
         }
     }
 </div>
-
