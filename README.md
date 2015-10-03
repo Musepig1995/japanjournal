@@ -6,4 +6,5 @@ Using Imgur API to strip the images and Azure services to host it all.
 * Responsive design - Especially for iPhone due to Maya having one
 * What is Flossy up to page - A comical set of pictures showing Maya's alpaca teddy in different situations
 * Add custom domain - something like journal.mayanolan.com
-* Possibly add videos?
+* Possibly add videos? Could do this via youtube links? Similar to the imgur links for photos
+* Delete journal entires
