@@ -31,6 +31,7 @@
                         <img class="image-group-highlight lazy" src="@item.ImageValue.FirstOrDefault().ImageUrl" />
                     </div>
                 </div>
+                @Html.ActionLink("Edit", "Edit/" + item.ID, "ImageGroups")
                 <hr />
             }
         }

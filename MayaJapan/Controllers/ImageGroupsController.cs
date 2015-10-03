@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using MayaJapan.DAL;
 using MayaJapan.Models;
 using System.IO;
+using System.Resources;
 
 namespace MayaJapan.Controllers
 {
@@ -115,14 +116,21 @@ namespace MayaJapan.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [ValidateInput(false)]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name,Description,Date,Url")] ImageGroup imageGroup)
+        public ActionResult Edit([Bind(Include = "ID,Date,Name,Description")] ImageGroup imageGroup)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(imageGroup).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+
+                var password = Request["Password"] != null ? Request["Password"] : null;
+
+                if (password == Properties.Resources.Password)
+                {
+                    db.Entry(imageGroup).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
             return View(imageGroup);
         }
