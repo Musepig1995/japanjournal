@@ -10,26 +10,32 @@
 <h2>That time when I...</h2>
 
 <div class="wrapper">
-    
-    @foreach (var item in Model.Reverse())
-    {
-        // Show the most recent items first!    
-        <div class="image-group-container row">
-            <div class="col-md-6 image-group-preview">
-                <span class="image-group-title" id="@item.ID">@item.Name</span>
-                <span class="image-group-description">@item.Description</span>
-                @foreach(var image in item.ImageValue)
-                {
-                    <img class="lazy" data-original="@image.ImageUrl" onclick="clickThumbnail(this)" />
-                }
-            </div>
-            <div class="col-md-6 image-group-highlight-image">
-                <img class="image-group-highlight lazy" data-original="@item.ImageValue.FirstOrDefault().ImageUrl" />
-            </div>
-        </div>
-        <hr />
+
+    @{
+        // Show the most recent items first
+        foreach (var date in Model.Reverse().GroupBy(d => d.Date.Date))
+        {
+            <h3>@date.Key.ToShortDateString()</h3>
+            foreach (var item in date)
+            {
+                <div class="image-group-container row">
+                    <div class="col-md-6 image-group-preview">
+                        <span class="image-group-title" id="@item.ID">@item.Name</span>
+                        <span class="image-group-description">@Html.Raw(@item.Description)</span>
+                        @foreach (var image in item.ImageValue)
+                        {
+                            <img class="lazy" data-original="@image.ImageUrl" onclick="clickThumbnail(this)" />
+                        }
+                    </div>
+                    <div class="col-md-6 image-group-highlight-image">
+                        <img class="image-group-highlight lazy" src="@item.ImageValue.FirstOrDefault().ImageUrl" />
+                    </div>
+                </div>
+                <hr />
+            }
+        }
     }
-    </div>
+</div>
 <script>
     $(function () {
         $("img.lazy").lazyload();

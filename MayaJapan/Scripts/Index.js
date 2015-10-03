@@ -6,10 +6,16 @@ function setupHandlers() {
         $("#preview-name").text(name);
         checkAddButton();
     });
-    $("#Description").on("input", function (e) {
+    $("#Description").on("change", function (e) {
         var desc = $(this).val();
-        $("#preview-description").text(desc);
+        $("#preview-description").html(desc);
         checkAddButton();
+    });
+    $("#Description").on("keyup", function (e) {
+        // If they press the enter key
+        if (e.which === 13) {
+            $("#Description").val($("#Description").val() + "<br />\n");
+        }
     });
     $("#upload-file").on("click", function (e) {
         e.preventDefault();
@@ -77,6 +83,26 @@ function readURL(input) {
         });
     }
 }
+function implementCkeditor() {
+    CKEDITOR.replace("Description", {
+        toolbarGroups: [
+				{ "name": "basicstyles", "groups": ["basicstyles"] },
+				{ "name": "links", "groups": ["links"] },
+				{ "name": "paragraph", "groups": ["list", "blocks"] },
+				{ "name": "styles", "groups": ["styles"] },
+				{ "name": "about", "groups": ["about"] }
+        ],
+        // Remove the redundant buttons from toolbar groups defined above.
+        removeButtons: 'Anchor'
+    });
+    CKEDITOR.instances["Description"].on("change", function () {
+        CKEDITOR.instances["Description"].updateElement();
+        $("#Description").val(CKEDITOR.instances["Description"].getData());
+        var desc = CKEDITOR.instances["Description"].getData();
+        $("#preview-description").html(desc);
+        checkAddButton();
+    })
+}
 function loadForm() {
     var partialView = $("#temp").html();
     $(partialView).appendTo($(".image-form")).hide().slideDown();
@@ -85,6 +111,7 @@ function loadForm() {
     createPreview();
     setupHandlers();
     formLoaded = true;
+    implementCkeditor();
 }
 function readImages(input, form) {
     if (input.files) {
