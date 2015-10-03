@@ -1,5 +1,6 @@
 ﻿var imagesLoaded = false,
-    formLoaded = false;
+    formLoaded = false,
+    images = [];
 function setupHandlers() {
     $("#Name").on("input", function (e) {
         var name = $(this).val();
@@ -25,8 +26,14 @@ function setupHandlers() {
         var form = $("#picture-form"),
             imageInput = document.getElementById("file");
 
+        // Disable all input
         $("#save-images").html("Uploading...");
         $("#save-images").prop("disabled", true);
+        $("#Name").prop("disabled", true);
+        $("#upload-file").prop("disabled", true);
+        CKEDITOR.instances["Description"].setReadOnly(true);
+        
+        hidePreviewImages();
         readImages(imageInput, form);
     });
     $("#picture-form").submit(function (e) {
@@ -115,28 +122,37 @@ function loadForm() {
 }
 function readImages(input, form) {
     if (input.files) {
-        var images = [];
+
+        var previewImages = $("#img-grid").children();
+
         $.each(input.files, function (index, object) {
             var FR = new FileReader();
             FR.onload = function (e) {
-                images.push(sendToImgur(e.target.result));
-                if (images.length === input.files.length) {
-                    // All images have been parsed 
-                    buildImagesIntoForm(images, form);
-                }
+                sendToImgur(e.target.result, previewImages[index], input.files.length);
             };
             FR.readAsDataURL(object);
         });
     }
 }
 
-function buildImagesIntoForm(images, form) {
+function hidePreviewImages() {
+    var photos = $("#img-grid").children();
+
+    $.each(photos, function (i, e) {
+        $(e).fadeTo(500, 0.5);
+    });
+}
+
+function uploadPost() {
+    var fileInput = $("#file");
+    fileInput.replaceWith(fileInput = fileInput.clone(true));
+
     $.each(images, function (i, element) {
         $("#hidden-pictures").val(function (i, val) {
             return val + (!val ? "" : ", ") + element;
         });
     });
-    form[0].submit();
+    $("#picture-form")[0].submit();
 }
 
 
@@ -146,8 +162,7 @@ function imgurTest(input) {
 
 }
 
-function sendToImgur(img) {
-    var imageUrl;
+function sendToImgur(img, previewImage, length) {
     $.ajax({
         url: "https://api.imgur.com/3/image",
         type: "POST",
@@ -159,11 +174,14 @@ function sendToImgur(img) {
             image: img.split("base64,")[1],
             type: "base64"
         },
-        async: false,
         success: function (result) {
-            imageUrl = result.data.link;
+            images.push(result.data.link);
+            $(previewImage).fadeTo(500, 1);
+            if (images.length === length) {
+                // All images have been parsed 
+                uploadPost();
+            }
         }
 
     });
-    return imageUrl;
 }
