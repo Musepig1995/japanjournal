@@ -12,12 +12,6 @@ function setupHandlers() {
         $("#preview-description").html(desc);
         checkAddButton();
     });
-    $("#Description").on("keyup", function (e) {
-        // If they press the enter key
-        if (e.which === 13) {
-            $("#Description").val($("#Description").val() + "<br />\n");
-        }
-    });
     $("#upload-file").on("click", function (e) {
         e.preventDefault();
         $("#file").trigger("click");
@@ -29,7 +23,7 @@ function setupHandlers() {
         // Disable all input
         $("#save-images").html("Uploading...");
         $("#save-images").prop("disabled", true);
-        $("#Name").prop("disabled", true);
+        $("#Name").prop("readonly", "readonly");
         $("#upload-file").prop("disabled", true);
         CKEDITOR.instances["Description"].setReadOnly(true);
         
@@ -53,15 +47,9 @@ function checkAddButton() {
         desc = $("#Description").val();
 
     if (name && desc) {
-        if (!imagesLoaded) {
-            $("#save-images").html("Save");
-            $("#save-images").prop("disabled", true);
-            $("#save-images").show();
-        } else {
             $("#save-images").html("Save");
             $("#save-images").prop("disabled", false);
             $("#save-images").show();
-        }
     } else {
         $("#save-images").hide();
     }
@@ -121,7 +109,7 @@ function loadForm() {
     implementCkeditor();
 }
 function readImages(input, form) {
-    if (input.files) {
+    if (input.files && input.files.length > 0) {
 
         var previewImages = $("#img-grid").children();
 
@@ -132,15 +120,19 @@ function readImages(input, form) {
             };
             FR.readAsDataURL(object);
         });
+    } else {
+        $("#picture-form")[0].submit();
     }
 }
 
 function hidePreviewImages() {
     var photos = $("#img-grid").children();
 
-    $.each(photos, function (i, e) {
-        $(e).fadeTo(500, 0.5);
-    });
+    if (photos.length > 0) {
+        $.each(photos, function (i, e) {
+            $(e).fadeTo(500, 0.5);
+        });
+    }
 }
 
 function uploadPost() {

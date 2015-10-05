@@ -182,3 +182,13 @@ body {
 #back:hover {
     cursor:pointer;
 }
+.action-link {
+    padding-right: 10px;
+    color: #EA8F3E;
+    text-decoration: none;
+    transition: all 0.5s;
+}
+.action-link:hover {
+    color: #117079;
+    text-decoration: none;
+}

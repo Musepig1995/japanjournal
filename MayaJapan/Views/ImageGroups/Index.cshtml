@@ -19,6 +19,8 @@
             foreach (var item in date)
             {
                 <div class="image-group-container row">
+                    @if (item.ImageValue.Count > 0)
+                    {
                     <div class="col-md-6 image-group-preview">
                         <span class="image-group-title" id="@item.ID">@item.Name</span>
                         <span class="image-group-description">@Html.Raw(@item.Description)</span>
@@ -30,8 +32,16 @@
                     <div class="col-md-6 image-group-highlight-image">
                         <img class="image-group-highlight lazy" src="@item.ImageValue.FirstOrDefault().ImageUrl" />
                     </div>
+                    } else
+                    {
+                        <div class="col-md-12 image-group-preview">
+                            <span class="image-group-title" id="@item.ID">@item.Name</span>
+                            <span class="image-group-description">@Html.Raw(@item.Description)</span>
+                        </div>
+                    }
                 </div>
-                @Html.ActionLink("Edit", "Edit/" + item.ID, "ImageGroups")
+                @Html.ActionLink("Edit", "Edit/" + item.ID, "ImageGroups", null,  new { @class = "action-link" })
+                @Html.ActionLink("Delete", "Delete/" + item.ID, "ImageGroups", null, new { @class = "action-link" })
                 <hr />
             }
         }

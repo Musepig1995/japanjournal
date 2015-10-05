@@ -3,19 +3,33 @@
 @{
     ViewBag.Title = "Grid";
     @Styles.Render("~/Content/Grid.css");
+    @Styles.Render("https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.css");
+    @Scripts.Render("https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.js");
 }
 <h1>My Year in Japan so far...</h1>
 <div id="photos">
 
     
-    @foreach(var item in Model.OrderBy(a => Guid.NewGuid()))
+    @foreach(var item in Model.Where(m => m.ImageValue.Count > 0).OrderBy(a => Guid.NewGuid()))
     {
         // Random ordering
         foreach(var image in item.ImageValue)
         {
 
             var imgSrc = image.ImageUrl;
+            <a id="@image.ID" href="@imgSrc" title="@item.Name">
                 <img src="@imgSrc" />
+            </a>
         }
     }
 </div>
+<script>
+    $(function () {
+        var images = $("#photos").children();
+        if (images && images.length > 0) {
+            $.each(images, function (i, e) {
+                $(e).fancybox();
+            });
+        }
+    });
+</script>
