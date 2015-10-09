@@ -68,5 +68,14 @@ namespace MayaJapan.Properties {
                 return ResourceManager.GetString("ImgurClientId", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to buttface.
+        /// </summary>
+        internal static string Password {
+            get {
+                return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
     }
 }

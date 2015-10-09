@@ -1,4 +1,5 @@
-﻿@model IEnumerable<MayaJapan.Models.ImageGroup>
+﻿@model PagedList.IPagedList<MayaJapan.Models.ImageGroup>
+@using PagedList.Mvc;
 
 @{
     ViewBag.Title = "Index";
@@ -19,6 +20,8 @@
             foreach (var item in date)
             {
                 <div class="image-group-container row">
+                    @if (item.ImageValue.Count > 0)
+                    {
                     <div class="col-md-6 image-group-preview">
                         <span class="image-group-title" id="@item.ID">@item.Name</span>
                         <span class="image-group-description">@Html.Raw(@item.Description)</span>
@@ -30,15 +33,30 @@
                     <div class="col-md-6 image-group-highlight-image">
                         <img class="image-group-highlight lazy" src="@item.ImageValue.FirstOrDefault().ImageUrl" />
                     </div>
+                    } else
+                    {
+                        <div class="col-md-12 image-group-preview">
+                            <span class="image-group-title" id="@item.ID">@item.Name</span>
+                            <span class="image-group-description">@Html.Raw(@item.Description)</span>
+                        </div>
+                    }
                 </div>
+                @Html.ActionLink("Edit", "Edit/" + item.ID, "ImageGroups", null,  new { @class = "action-link" })
+                @Html.ActionLink("Delete", "Delete/" + item.ID, "ImageGroups", null, new { @class = "action-link" })
                 <hr />
             }
         }
     }
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
 </div>
 <script>
     $(function () {
-        $("img.lazy").lazyload();
+        $("img.lazy").lazyload({
+            effect: "fadeIn",
+            threshold: 300
+        });
     });
 </script>
 

@@ -1,21 +1,17 @@
 ﻿var imagesLoaded = false,
-    formLoaded = false;
+    formLoaded = false,
+    images = [];
 function setupHandlers() {
     $("#Name").on("input", function (e) {
         var name = $(this).val();
         $("#preview-name").text(name);
+        localStorage.setItem("title", name);
         checkAddButton();
     });
     $("#Description").on("change", function (e) {
         var desc = $(this).val();
         $("#preview-description").html(desc);
         checkAddButton();
-    });
-    $("#Description").on("keyup", function (e) {
-        // If they press the enter key
-        if (e.which === 13) {
-            $("#Description").val($("#Description").val() + "<br />\n");
-        }
     });
     $("#upload-file").on("click", function (e) {
         e.preventDefault();
@@ -25,8 +21,14 @@ function setupHandlers() {
         var form = $("#picture-form"),
             imageInput = document.getElementById("file");
 
+        // Disable all input
         $("#save-images").html("Uploading...");
         $("#save-images").prop("disabled", true);
+        $("#Name").prop("readonly", "readonly");
+        $("#upload-file").prop("disabled", true);
+        CKEDITOR.instances["Description"].setReadOnly(true);
+        
+        hidePreviewImages();
         readImages(imageInput, form);
     });
     $("#picture-form").submit(function (e) {
@@ -46,15 +48,9 @@ function checkAddButton() {
         desc = $("#Description").val();
 
     if (name && desc) {
-        if (!imagesLoaded) {
-            $("#save-images").html("Save");
-            $("#save-images").prop("disabled", true);
-            $("#save-images").show();
-        } else {
             $("#save-images").html("Save");
             $("#save-images").prop("disabled", false);
             $("#save-images").show();
-        }
     } else {
         $("#save-images").hide();
     }
@@ -83,6 +79,17 @@ function readURL(input) {
         });
     }
 }
+function loadSessionValues() {
+    if (localStorage.getItem("title")) {
+        $("#preview-name").html(localStorage.getItem("title"));
+        $("#Name").val(localStorage.getItem("title"));
+    }
+
+    if (localStorage.getItem("desc")) {
+        $("#preview-description").html(localStorage.getItem("desc"));
+        $("#Description").val(localStorage.getItem("desc"));
+    }
+}
 function implementCkeditor() {
     CKEDITOR.replace("Description", {
         toolbarGroups: [
@@ -99,6 +106,9 @@ function implementCkeditor() {
         CKEDITOR.instances["Description"].updateElement();
         $("#Description").val(CKEDITOR.instances["Description"].getData());
         var desc = CKEDITOR.instances["Description"].getData();
+        
+        // Save the values in a session in case they close the page
+        localStorage.setItem("desc", desc);
         $("#preview-description").html(desc);
         checkAddButton();
     })
@@ -112,31 +122,46 @@ function loadForm() {
     setupHandlers();
     formLoaded = true;
     implementCkeditor();
+    loadSessionValues();
 }
 function readImages(input, form) {
-    if (input.files) {
-        var images = [];
+    if (input.files && input.files.length > 0) {
+        var previewImages = $("#img-grid").children();
+
         $.each(input.files, function (index, object) {
             var FR = new FileReader();
             FR.onload = function (e) {
-                images.push(sendToImgur(e.target.result));
-                if (images.length === input.files.length) {
-                    // All images have been parsed 
-                    buildImagesIntoForm(images, form);
-                }
+                sendToImgur(e.target.result, previewImages[index], input.files.length);
             };
             FR.readAsDataURL(object);
+        });
+    } else {
+        localStorage.clear();
+        $("#picture-form")[0].submit();
+    }
+}
+
+function hidePreviewImages() {
+    var photos = $("#img-grid").children();
+
+    if (photos.length > 0) {
+        $.each(photos, function (i, e) {
+            $(e).fadeTo(500, 0.5);
         });
     }
 }
 
-function buildImagesIntoForm(images, form) {
+function uploadPost() {
+    var fileInput = $("#file");
+    fileInput.replaceWith(fileInput = fileInput.clone(true));
+
     $.each(images, function (i, element) {
         $("#hidden-pictures").val(function (i, val) {
             return val + (!val ? "" : ", ") + element;
         });
     });
-    form[0].submit();
+    localStorage.clear();
+    $("#picture-form")[0].submit();
 }
 
 
@@ -146,8 +171,7 @@ function imgurTest(input) {
 
 }
 
-function sendToImgur(img) {
-    var imageUrl;
+function sendToImgur(img, previewImage, length) {
     $.ajax({
         url: "https://api.imgur.com/3/image",
         type: "POST",
@@ -159,11 +183,14 @@ function sendToImgur(img) {
             image: img.split("base64,")[1],
             type: "base64"
         },
-        async: false,
         success: function (result) {
-            imageUrl = result.data.link;
+            images.push(result.data.link);
+            $(previewImage).fadeTo(500, 1);
+            if (images.length === length) {
+                // All images have been parsed 
+                uploadPost();
+            }
         }
 
     });
-    return imageUrl;
 }

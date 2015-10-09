@@ -120,4 +120,7 @@
   <data name="ImgurClientId" xml:space="preserve">
     <value>0aa4f7a77734f59</value>
   </data>
+  <data name="Password" xml:space="preserve">
+    <value>buttface</value>
+  </data>
 </root>

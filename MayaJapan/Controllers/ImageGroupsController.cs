@@ -9,6 +9,8 @@ using System.Web.Mvc;
 using MayaJapan.DAL;
 using MayaJapan.Models;
 using System.IO;
+using System.Resources;
+using PagedList;
 
 namespace MayaJapan.Controllers
 {
@@ -17,9 +19,11 @@ namespace MayaJapan.Controllers
         private Context db = new Context();
 
         // GET: ImageGroups
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            return View(db.ImageGroups.ToList());
+            int pageSize = 8;
+            int pageNumber = page ?? 1;
+            return View(db.ImageGroups.OrderByDescending(i => i.ID).ToPagedList(pageNumber, pageSize));
         }
 
         // GET: ImageGroups as Grid
@@ -66,30 +70,28 @@ namespace MayaJapan.Controllers
                 {
                     imageUrlSet = this.stripImageUrl(unformattedUrlSet);
 
+                    imageGroup.ImageValue = new List<Image>();
+
+                    foreach (var image in imageUrlSet)
+                    {
+
+                        Image imageEntity = new Image();
+                        imageEntity.ImageUrl = image.Trim();
+
+                        ImagesController.Create(imageEntity);
+
+                        imageGroup.ImageValue.Add(imageEntity);
+
+                    }
                 }
 
-                imageGroup.ImageValue = new List<Image>();
-                
-                foreach (var image in imageUrlSet)
-                {
 
-                    Image imageEntity = new Image();
-                    imageEntity.ImageUrl = image.Trim();
-
-                    ImagesController.Create(imageEntity);
-
-                    imageGroup.ImageValue.Add(imageEntity);
-
-                }
 
                 imageGroup.Date = DateTime.Now;
-                try {
-                    db.ImageGroups.Add(imageGroup);
-                    db.SaveChanges();
-                } catch(Exception e)
-                {
-                    var apple = e;
-                }
+
+                db.ImageGroups.Add(imageGroup);
+                db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
 
@@ -115,26 +117,50 @@ namespace MayaJapan.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [ValidateInput(false)]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name,Description,Date,Url")] ImageGroup imageGroup)
+        public ActionResult Edit([Bind(Include = "ID,Date,Name,Description")] ImageGroup imageGroup)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(imageGroup).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+
+                var password = Request["Password"] != null ? Request["Password"] : null;
+
+                if (password == Properties.Resources.Password)
+                {
+                    db.Entry(imageGroup).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
+            return View(imageGroup);
+        }
+
+        public ActionResult Delete(int? id)
+        {
+            if(id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var imageGroup = db.ImageGroups.Find(id.Value);
+
+            if(imageGroup == null)
+            {
+                return HttpNotFound();
+            }
+
             return View(imageGroup);
         }
 
         public void Clear()
         {
             var imageGroups = db.ImageGroups.ToArray();
-            foreach(var imageGroup in imageGroups)
+            foreach (var imageGroup in imageGroups)
             {
                 var images = imageGroup.ImageValue.ToArray();
 
-                foreach(var image in images)
+                foreach (var image in images)
                 {
                     db.Images.Remove(image);
                 }
@@ -144,21 +170,34 @@ namespace MayaJapan.Controllers
             db.SaveChanges();
         }
 
+        [HttpPost]
         // POST: ImageGroups/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete([Bind(Include = "Id")] ImageGroup imageGroup)
         {
-            ImageGroup imageGroup = db.ImageGroups.Find(id);
+            var password = Request["Password"] != null ? Request["Password"] : null;
 
-            var images = imageGroup.ImageValue.ToArray();
+            var realImageGroup = db.ImageGroups.Find(imageGroup.ID);
 
-            foreach(var image in images)
+            if(password == null)
             {
-                db.Images.Remove(image);
-            }
+                return View(imageGroup);
+            } else if(password != Properties.Resources.Password)
+            {
+                return new HttpUnauthorizedResult();
+            } else
+            {
+                var images = realImageGroup.ImageValue.ToArray();
 
-            db.ImageGroups.Remove(imageGroup);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+                foreach (var image in images)
+                {
+                    db.Images.Remove(image);
+                }
+
+                db.ImageGroups.Remove(realImageGroup);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            
         }
 
         protected override void Dispose(bool disposing)

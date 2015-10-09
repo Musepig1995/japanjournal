@@ -7,7 +7,7 @@
 <h2>Edit</h2>
 
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Edit", "ImageGroups", null, FormMethod.Post, new { id = "edit-form"}))
 {
     @Html.AntiForgeryToken()
     
@@ -16,6 +16,7 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.ID)
+        @Html.HiddenFor(model => model.Date)
 
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -28,16 +29,14 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                <textarea id="Description" name="Description" form="edit-form" class="form-control">@Html.Raw(Model.Description)</textarea>
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.Label("Password", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+                @Html.Editor("Password", new { htmlAttributes = new { @type = "password", @class = "form-control" } })
             </div>
         </div>
 
@@ -55,4 +54,25 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("//cdn.ckeditor.com/4.5.3/standard/ckeditor.js")
+<script type="text/javascript">
+    $(function () {
+        CKEDITOR.replace("Description", {
+            toolbarGroups: [
+                    { "name": "basicstyles", "groups": ["basicstyles"] },
+                    { "name": "links", "groups": ["links"] },
+                    { "name": "paragraph", "groups": ["list", "blocks"] },
+                    { "name": "styles", "groups": ["styles"] },
+                    { "name": "about", "groups": ["about"] }
+            ],
+            // Remove the redundant buttons from toolbar groups defined above.
+            removeButtons: 'Anchor'
+        });
+        CKEDITOR.instances["Description"].setData(model => model.Description);
+        CKEDITOR.instances["Description"].on("change", function () {
+            CKEDITOR.instances["Description"].updateElement();
+            $("#Description").val(CKEDITOR.instances["Description"].getData());
+        })
+    });
+</script>
 }
