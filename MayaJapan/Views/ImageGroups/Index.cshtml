@@ -1,4 +1,5 @@
-﻿@model IEnumerable<MayaJapan.Models.ImageGroup>
+﻿@model PagedList.IPagedList<MayaJapan.Models.ImageGroup>
+@using PagedList.Mvc;
 
 @{
     ViewBag.Title = "Index";
@@ -46,11 +47,15 @@
             }
         }
     }
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
 </div>
 <script>
     $(function () {
         $("img.lazy").lazyload({
-            effect: "fadeIn"
+            effect: "fadeIn",
+            threshold: 300
         });
     });
 </script>

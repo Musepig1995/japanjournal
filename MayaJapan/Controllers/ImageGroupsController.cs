@@ -10,6 +10,7 @@ using MayaJapan.DAL;
 using MayaJapan.Models;
 using System.IO;
 using System.Resources;
+using PagedList;
 
 namespace MayaJapan.Controllers
 {
@@ -18,9 +19,11 @@ namespace MayaJapan.Controllers
         private Context db = new Context();
 
         // GET: ImageGroups
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            return View(db.ImageGroups.ToList());
+            int pageSize = 8;
+            int pageNumber = page ?? 1;
+            return View(db.ImageGroups.OrderByDescending(i => i.ID).ToPagedList(pageNumber, pageSize));
         }
 
         // GET: ImageGroups as Grid
