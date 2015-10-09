@@ -5,6 +5,7 @@ function setupHandlers() {
     $("#Name").on("input", function (e) {
         var name = $(this).val();
         $("#preview-name").text(name);
+        localStorage.setItem("title", name);
         checkAddButton();
     });
     $("#Description").on("change", function (e) {
@@ -78,6 +79,17 @@ function readURL(input) {
         });
     }
 }
+function loadSessionValues() {
+    if (localStorage.getItem("title")) {
+        $("#preview-name").html(localStorage.getItem("title"));
+        $("#Name").val(localStorage.getItem("title"));
+    }
+
+    if (localStorage.getItem("desc")) {
+        $("#preview-description").html(localStorage.getItem("desc"));
+        $("#Description").val(localStorage.getItem("desc"));
+    }
+}
 function implementCkeditor() {
     CKEDITOR.replace("Description", {
         toolbarGroups: [
@@ -94,6 +106,9 @@ function implementCkeditor() {
         CKEDITOR.instances["Description"].updateElement();
         $("#Description").val(CKEDITOR.instances["Description"].getData());
         var desc = CKEDITOR.instances["Description"].getData();
+        
+        // Save the values in a session in case they close the page
+        localStorage.setItem("desc", desc);
         $("#preview-description").html(desc);
         checkAddButton();
     })
@@ -107,10 +122,10 @@ function loadForm() {
     setupHandlers();
     formLoaded = true;
     implementCkeditor();
+    loadSessionValues();
 }
 function readImages(input, form) {
     if (input.files && input.files.length > 0) {
-
         var previewImages = $("#img-grid").children();
 
         $.each(input.files, function (index, object) {
@@ -121,6 +136,7 @@ function readImages(input, form) {
             FR.readAsDataURL(object);
         });
     } else {
+        localStorage.clear();
         $("#picture-form")[0].submit();
     }
 }
@@ -144,6 +160,7 @@ function uploadPost() {
             return val + (!val ? "" : ", ") + element;
         });
     });
+    localStorage.clear();
     $("#picture-form")[0].submit();
 }
 
