@@ -1,0 +1,23 @@
+﻿body {
+    padding-left: 200px;
+    padding-right: 200px;
+}
+.countdown-container {
+    background-color: #FFC088;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-right: 150px;
+    padding-left: 150px;
+}
+
+
+.countdown-container .row .col-md-3 {
+    text-align: center;
+}
+.countdown-number {
+    font-size: 2em;
+    background-color: white;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 3px;
+}
