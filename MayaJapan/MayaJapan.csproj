@@ -145,6 +145,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CountdownController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImageGroupsController.cs" />
     <Compile Include="Controllers\ImagesController.cs" />
@@ -186,7 +187,9 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\countdown.css" />
     <Content Include="Content\Grid.css" />
+    <Content Include="Content\husky.css" />
     <Content Include="Content\imagegroup.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
@@ -195,11 +198,14 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\countdown.js" />
+    <Content Include="Scripts\countdown2.js" />
     <Content Include="Scripts\imageGroupImages.js" />
     <Content Include="Scripts\Index.js" />
     <Content Include="Metadata\deploymentTemplates\apiappconfig.azureresource.json" />
     <Content Include="apiapp.json" />
     <Content Include="ClassDiagram1.cd" />
+    <None Include="Properties\PublishProfiles\Home Server.pubxml" />
     <None Include="Properties\PublishProfiles\maya-japan %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\maya-japan.pubxml" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
@@ -231,8 +237,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\ImageGroups\Create.cshtml" />
     <Content Include="Views\ImageGroups\Delete.cshtml" />
@@ -241,10 +245,12 @@
     <Content Include="Views\ImageGroups\Index.cshtml" />
     <Content Include="Views\ImageGroups\Grid.cshtml" />
     <Content Include="Views\Home\_Form.cshtml" />
+    <Content Include="Views\Countdown\Index.cshtml" />
+    <Content Include="Views\ImageGroups\Graph.cshtml" />
+    <Content Include="Views\Shared\_Husky.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

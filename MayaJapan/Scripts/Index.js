@@ -141,6 +141,34 @@ function readImages(input, form) {
     }
 }
 
+function resizeImage(img) {
+    var MAX_WIDTH = 600,
+        MAX_HEIGHT = 800,
+        width = img.width,
+        height = img.height;
+
+    if (width > height) {
+        if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+        }
+    } else {
+        if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+        }
+    }
+    var canvas = $("#image-resizer")[0];
+
+    canvas.width = width;
+    canvas.height = height;
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0, width, height);
+
+    return canvas.toDataURL("image/jpg");
+
+}
+
 function hidePreviewImages() {
     var photos = $("#img-grid").children();
 

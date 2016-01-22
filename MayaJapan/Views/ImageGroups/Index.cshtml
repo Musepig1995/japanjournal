@@ -14,7 +14,7 @@
 
     @{
         // Show the most recent items first
-        foreach (var date in Model.Reverse().GroupBy(d => d.Date.Date))
+        foreach (var date in Model.GroupBy(d => d.Date.Date))
         {
             <h3>@date.Key.ToShortDateString()</h3>
             foreach (var item in date)

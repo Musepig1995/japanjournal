@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
 </head>
 <body>
@@ -17,11 +16,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Maya's Japan Diary", "Index", "Home", new { area = "" }, new { @class = "navbar-brand nav-heading" })
+                @Html.ActionLink("Maya's Journal", "Index", "Home", new { area = "" }, new { @class = "navbar-brand nav-heading" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Journal", "Index", "ImageGroups")</li>
+                    <li>@Html.ActionLink("Entries", "Index", "ImageGroups")</li>
                     <li>@Html.ActionLink("Grid", "Grid", "ImageGroups")</li>
                 </ul>
             </div>
@@ -31,11 +30,25 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Harrison South</p>
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; @DateTime.Now.Year - Harrison South</p>
+                </div>
+                <div class="col-md-6">
+                    I get to see my favourite person in... <div id="countdown"></div>
+                </div>
+            </div>
         </footer>
     </div>
 
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/Scripts/countdown2.js")
     @RenderSection("scripts", required: false)
+    <script>
+        $(function () {
+            CountDownTimer("02/28/2016 12:00 PM", "countdown");
+
+        });
+    </script>
 </body>
 </html>

@@ -10,6 +10,7 @@
             {
                 // Get all posts where there is an image
                 var imageModels = Model.Where(m => m.ImageValue.Count > 0);
+
                 Random random = new Random();
 
                 var imageGroup = imageModels.ElementAt(random.Next(imageModels.Count()));
@@ -17,7 +18,7 @@
 
                 if (!string.IsNullOrEmpty(image.ImageUrl))
                 {
-                    <img src="@image.ImageUrl" />
+                    <img id="what" src="@image.ImageUrl" />
                 }
                 else
                 {
@@ -66,11 +67,11 @@
             <div class="col-md-6 image-grid" id="img-grid">
             </div>
         </div>
+        <canvas id="image-resizer"></canvas>
         <button class="btn btn-default" id="save-images" type="submit"></button>
     </div>
     <div id="temp"></div>
 </div>
-<img id="img" src="" />
 <div id="base"></div>
 @Scripts.Render("~/Scripts/Index.js")
 @Scripts.Render("//cdn.ckeditor.com/4.5.3/standard/ckeditor.js")

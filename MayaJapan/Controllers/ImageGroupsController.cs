@@ -23,7 +23,7 @@ namespace MayaJapan.Controllers
         {
             int pageSize = 8;
             int pageNumber = page ?? 1;
-            return View(db.ImageGroups.OrderByDescending(i => i.ID).ToPagedList(pageNumber, pageSize));
+            return View(db.ImageGroups.OrderByDescending(m => m.ID).ToPagedList(pageNumber, pageSize));
         }
 
         // GET: ImageGroups as Grid
@@ -49,6 +49,11 @@ namespace MayaJapan.Controllers
 
         // GET: ImageGroups/Create
         public ActionResult Create()
+        {
+            return View();
+        }
+
+        public ActionResult Graph()
         {
             return View();
         }
